@@ -1,7 +1,4 @@
-.PHONY: setup dev-frontend dev-backend
-
-setup:
-	./scripts/bootstrap.sh
+.PHONY: dev-frontend dev-backend
 
 dev-frontend:
 	cd frontend && npm run dev

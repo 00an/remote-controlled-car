@@ -51,10 +51,6 @@ export default function Home() {
           </span>
           <h2 className="text-4xl font-semibold tracking-tight">{t('team.title')}</h2>
           <p className="text-zinc-400 leading-relaxed">{t('team.description')}</p>
-          <p className="text-zinc-400 text-sm mt-1">{t('team.order')}</p>
-          <ul className="list-disc list-inside text-zinc-400 space-y-1 mt-2">
-            <li>Alex Van Der Linden - Integration Engineer</li>
-          </ul>
         </div>
       </section>
     </div>

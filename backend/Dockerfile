@@ -13,7 +13,7 @@ RUN mvn clean package -DskipTests
 # Run configuration
 FROM eclipse-temurin:21-jre
 WORKDIR /app
-EXPOSE 8080
+EXPOSE 3000
 
 # Run installation
 COPY --from=build /app/target/*.jar app.jar

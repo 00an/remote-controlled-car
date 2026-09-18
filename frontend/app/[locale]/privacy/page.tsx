@@ -24,10 +24,8 @@ const PrivacyPage = () => {
                 1. Who is responsible for your data?
               </h2>
               <p>
-                Team NL-14 (UCLL Integration Project) is the data controller for the personal data
-                you provide when using this application. This application is developed for
-                educational purposes as part of the IT Integration Project at UCLL University
-                College.
+                The maintainer of this project is the data controller for the personal data you
+                provide when using this application.
               </p>
             </section>
 
@@ -81,7 +79,7 @@ const PrivacyPage = () => {
                 5. Who has access to your data?
               </h2>
               <p>
-                Your data is stored in a PostgreSQL database hosted on the UCLL OKD cloud platform.
+                Your data is stored in a PostgreSQL database hosted on an OKD (Kubernetes) cloud platform.
                 It is not shared with or sold to any third parties.
               </p>
             </section>
@@ -128,7 +126,7 @@ const PrivacyPage = () => {
               <h2 className="text-base font-semibold text-white mb-2">8. Contact</h2>
               <p>
                 If you have questions about this privacy notice or wish to exercise your rights,
-                contact the project team via the UCLL educational platform.
+                please open an issue on the GitHub repository for this project.
               </p>
             </section>
           </div>

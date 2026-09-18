@@ -11,7 +11,8 @@ The following versions of this project are currently receiving security updates:
 
 ## Reporting a Vulnerability
 
-If you find a security issue in this project, please report it privately via
-- Email: alex.vanderlinden@outlook.be
+If you find a security issue in this project, please report it privately using
+GitHub's private vulnerability reporting: open the repository's **Security** tab
+and click **Report a vulnerability**.
 
 Please do **not** open a public GitHub Issue for security vulnerabilities.

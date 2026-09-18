@@ -57,17 +57,14 @@ class ApiExceptionHandler {
     return Map.of("errors", errors);
   }
 
-  // Catch-all for anything not handled above, returns 500 + logs the stack trace
+  // Catch-all for anything not handled above, returns 500 + logs the stack trace.
+  // The exception details are logged server-side only — the client only ever sees a
+  // generic message, since exception messages/types can leak internal implementation
+  // details (SQL, file paths, library internals) to callers.
   @ExceptionHandler(Exception.class)
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   public Map<String, String> handleGeneric(Exception ex) {
     log.error("Unhandled exception bubbled to global handler", ex);
-    return Map.of(
-        "error",
-        "an unexpected error occurred",
-        "type",
-        ex.getClass().getSimpleName(),
-        "message",
-        ex.getMessage() == null ? "" : ex.getMessage());
+    return Map.of("error", "an unexpected error occurred");
   }
 }

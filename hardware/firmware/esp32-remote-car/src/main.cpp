@@ -210,7 +210,7 @@ void drawBootScreen() {
     
     display.setTextSize(1);
     display.setCursor(20, 54);
-    display.println("TEAM NL-14");
+    display.println("RC CAR");
     
     display.display();
 }

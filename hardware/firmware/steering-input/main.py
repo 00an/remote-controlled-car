@@ -28,7 +28,7 @@ if pygame.joystick.get_count() == 0:
 joy = pygame.joystick.Joystick(0)
 joy.init()
 print(f"Controller : {joy.get_name()}")
-print(f"POST naar  : {BACKEND_URL}  @ {POLL_HZ}Hz")
+print(f"POST to    : {BACKEND_URL}  @ {POLL_HZ}Hz")
 print(f"Session    : {SESSION_BASE}/controller/session/{{start,stop}}\n")
 
 # --- Pedal axis mapping & calibration -------------------------------------
@@ -169,7 +169,7 @@ try:
                 print(f"HTTP {r.status_code}: {r.text[:120]}")
         except requests.exceptions.RequestException as e:
             errors += 1
-            print(f"Fout: {e}")
+            print(f"Error: {e}")
 
         now = time.time()
         if now - last_log >= 0.5:

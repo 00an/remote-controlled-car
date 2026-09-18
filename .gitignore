@@ -5,3 +5,6 @@
 *CLAUDE.md
 CONTRIBUTING.md
 docs/setup.md
+.claude/
+**/config_secrets.h
+!**/config_secrets.h.example

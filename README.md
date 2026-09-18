@@ -2,14 +2,14 @@
 
 ## Project structure
 
-| Folder             | Description                  |
-| ------------------ | ----------------------------- |
-| `backend`    | Java / Spring Boot backend    |
-| `frontend`   | TypeScript / Next.js frontend |
-| `esp32-remote-car` | ESP32 / C++ firmware for the car |
-| `steering-input`   | Python script that forwards wheel input |
-| `ai`               | Data / AI experiments        |
-| `terraform`        | Infrastructure as code        |
+| Folder              | Description                                        |
+| ------------------- | --------------------------------------------------- |
+| `backend`           | Java / Spring Boot backend                          |
+| `frontend`          | TypeScript / Next.js frontend                        |
+| `hardware/firmware`  | ESP32 / C++ car firmware + the Python wheel-input script |
+| `hardware`          | PCB notes, datasheets, bill of materials             |
+| `ai`                | ETL pipeline + Streamlit analytics dashboard          |
+| `docs`              | architecture notes and decision records               |
 
 ## Architecture
 
@@ -76,12 +76,12 @@ NEXT_PUBLIC_API_URL=http://localhost:3000
 ### Steering input (Python)
 
 ```bash
-cd steering-input
+cd hardware/firmware/steering-input
 pip install -r requirements.txt
 python main.py
 ```
 
-Requires a connected controller (e.g. a Logitech G29). Create a `.env` file in `steering-input/` with:
+Requires a connected controller (e.g. a Logitech G29). Create a `.env` file in `hardware/firmware/steering-input/` with:
 
 ```
 BACKEND_URL=http://localhost:3000/v1/api/controller
@@ -90,7 +90,7 @@ POLL_HZ=60
 
 ### ESP32 firmware
 
-Opened with PlatformIO. Configure Wi-Fi + backend URL in `esp32-remote-car/include/config.h`, then flash via PlatformIO.
+Opened with PlatformIO. Configure Wi-Fi + backend URL in `hardware/firmware/esp32-remote-car/include/config.h`, then flash via PlatformIO.
 
 ## Tech stack
 
@@ -132,27 +132,9 @@ The application runs in production on an **OKD (OpenShift)** cluster at `apps.ok
 - **Backend**: `backend-itip-nl-14.apps.okd.ucll.cloud`
 - **Frontend**: `frontend-itip-nl-14.apps.okd.ucll.cloud`
 
-### Infrastructure (Terraform)
-
-Infrastructure is managed via Terraform in [`terraform/`](terraform/). Each deployment has its own `.tf` file:
-
-- `backend_deployment.tf` — Spring Boot backend
-- `frontend_deployment.tf` — Next.js frontend
-- `postgresql_deployment.tf` — PostgreSQL database
-
-Apply:
-
-```bash
-cd terraform
-terraform init
-terraform apply
-```
-
-Requires a valid OKD token (`var.okd_token`).
-
 ### Container images
 
-Both backend and frontend have a `Dockerfile` in their root folder. These are built in the OKD cluster itself (BuildConfig) and rolled out via Terraform.
+Both backend and frontend have a `Dockerfile` in their root folder. These are built in the OKD cluster itself (BuildConfig) and rolled out as Deployments.
 
 ### Routes (TLS)
 

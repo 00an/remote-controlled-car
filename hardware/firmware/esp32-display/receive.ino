@@ -68,7 +68,7 @@ void drawWaitingScreen()
     display.fillRect(0, 0, screenWidth, 10, SSD1306_WHITE);
     display.setTextColor(SSD1306_BLACK);
     display.setCursor(2, 1);
-    display.println("NL-14 DISPLAY");
+    display.println("RC CAR DISPLAY");
 
     display.setTextColor(SSD1306_WHITE);
     display.setCursor(0, 16);

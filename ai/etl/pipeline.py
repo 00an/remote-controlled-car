@@ -149,7 +149,7 @@ def configure_logging() -> None:
 
 def main(argv: list[str] | None = None) -> int:
     configure_logging()
-    parser = argparse.ArgumentParser(description="Run the NL-14 control-input analytics pipeline.")
+    parser = argparse.ArgumentParser(description="Run the control-input analytics pipeline.")
     parser.add_argument("--export-parquet", action="store_true", help="Write data/control_inputs.parquet.")
     parser.add_argument("--batch-size", type=int, default=1000)
     args = parser.parse_args(argv)

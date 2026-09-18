@@ -9,5 +9,5 @@ class H(BaseHTTPRequestHandler):
         self.end_headers()
     def log_message(self, *a): pass
 
-print("Test server luistert op http://localhost:5000")
+print("Test server listening on http://localhost:5000")
 HTTPServer(('', 5000), H).serve_forever()

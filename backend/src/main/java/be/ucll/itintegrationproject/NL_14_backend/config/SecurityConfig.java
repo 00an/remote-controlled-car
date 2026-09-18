@@ -65,6 +65,11 @@ public class SecurityConfig {
                 authorizeRequests
                     .requestMatchers("/v1/status")
                     .permitAll()
+                    // Intentionally public: the physical steering wheel (a standalone Python
+                    // script) and the ESP32 car both talk to these endpoints with no login flow
+                    // of their own, so they can't carry the auth cookie. This assumes a trusted
+                    // deployment (single-driver hobby project) rather than a public multi-tenant
+                    // service; don't relax this further without adding real device auth first.
                     .requestMatchers("/v1/api/controller/**")
                     .permitAll()
                     .requestMatchers("/ws", "/ws/**")
@@ -82,6 +87,12 @@ public class SecurityConfig {
                     .anyRequest()
                     .authenticated())
         .cors(Customizer.withDefaults())
+        // CSRF protection is disabled: this API is stateless JSON-over-HTTP consumed by a
+        // single-page app (never HTML forms), CORS is locked to an explicit origin allowlist
+        // (see CorsProperties), and the auth cookie only carries a bearer JWT read by
+        // CookieBearerTokenResolver rather than driving server-side session state. A classic
+        // CSRF token exchange would add complexity without addressing a realistic attack here;
+        // if this API ever accepts browser form submissions or session-based auth, revisit this.
         .csrf(csrf -> csrf.disable())
         .headers(
             headers -> {

@@ -5,7 +5,7 @@ on:
     branches: ['main', 'dev']
     # Only trigger when frontend files change
     paths:
-      - 'nl-14-frontend/**'
+      - 'frontend/**'
   # Allow manual execution
   workflow_dispatch:
 env:
@@ -30,16 +30,16 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: nl-14-frontend/package-lock.json
+          cache-dependency-path: frontend/package-lock.json
 
       # install dependencies
       - name: Install dependencies
-        working-directory: ./nl-14-frontend
+        working-directory: ./frontend
         run: npm ci
 
       # run tests
       - name: Run tests
-        working-directory: ./nl-14-frontend
+        working-directory: ./frontend
         run: |
           if npm run | grep -q "test"; then
             npm test -- --passWithNoTests
@@ -49,7 +49,7 @@ jobs:
 
       # run a11y
       - name: Run a11y
-        working-directory: ./nl-14-frontend
+        working-directory: ./frontend
         run: |
           npm run build
           npm run start &
@@ -83,7 +83,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
         with:
-          context: ./nl-14-frontend
+          context: ./frontend
           push: true
           provenance: false
           tags: ${{ steps.meta.outputs.tags }}
@@ -98,7 +98,7 @@ jobs:
       - name: Delete old package versions (keep last 3)
         uses: actions/delete-package-versions@v5
         with:
-          package-name: itip-nl-14-racingboys/frontend
+          package-name: remote-controlled-car/frontend
           package-type: container
           min-versions-to-keep: 3
           token: ${{ secrets.GITHUB_TOKEN }}

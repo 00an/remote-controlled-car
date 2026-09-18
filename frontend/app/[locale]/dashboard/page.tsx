@@ -60,7 +60,7 @@ function SteeringWheel({ value }: { value: number }) {
         style={{ transform: `rotate(${deg}deg)` }}
       >
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full bg-zinc-800 border-4 border-zinc-700 flex items-center justify-center">
-          <div className="text-red-500 font-bold text-xs tracking-widest">NL-14</div>
+          <div className="text-red-500 font-bold text-xs tracking-widest">RC</div>
         </div>
         <div className="absolute left-1/2 -translate-x-1/2 -top-2 w-2 h-6 bg-red-500 rounded-full shadow-[0_0_10px_rgba(239,68,68,0.8)]" />
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-44 h-1 bg-zinc-700" />

@@ -1,4 +1,4 @@
-import { execSync } from 'child_process';
+import { execFileSync } from 'child_process';
 import { readdirSync, statSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -24,4 +24,7 @@ function getPages(dir, urlPath = '') {
 
 const urls = getPages(pagesDir);
 console.log('checking pages:', urls);
-execSync(`axe ${urls.join(' ')} --tags wcag2a,wcag2aa,wcag21a,wcag21aa`, { stdio: 'inherit' });
+// execFileSync (not execSync) so the URL list is passed as discrete argv entries
+// rather than interpolated into a shell string — avoids shell-injection if a route
+// name ever contains shell metacharacters.
+execFileSync('axe', [...urls, '--tags', 'wcag2a,wcag2aa,wcag21a,wcag21aa'], { stdio: 'inherit' });

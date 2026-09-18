@@ -5,7 +5,7 @@ on:
     branches: ['main', 'dev']
     # Only trigger when backend files change
     paths:
-      - 'nl-14-backend/**'
+      - 'backend/**'
   # Allow manual execution
   workflow_dispatch:
 env:
@@ -34,7 +34,7 @@ jobs:
 
       # Run tests
       - name: Run tests
-        working-directory: ./nl-14-backend
+        working-directory: ./backend
         run: mvn -T 1C test
 
       # Authenticate with GitHub Container Registry
@@ -64,7 +64,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
         with:
-          context: ./nl-14-backend
+          context: ./backend
           push: true
           provenance: false
           tags: ${{ steps.meta.outputs.tags }}
@@ -76,7 +76,7 @@ jobs:
       - name: Delete old package versions (keep last 3)
         uses: actions/delete-package-versions@v5
         with:
-          package-name: itip-nl-14-racingboys/backend
+          package-name: remote-controlled-car/backend
           package-type: container
           min-versions-to-keep: 3
           token: ${{ secrets.GITHUB_TOKEN }}

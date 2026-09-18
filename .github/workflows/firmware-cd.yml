@@ -15,19 +15,29 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install PlatformIO
         run: pip install platformio
-      - name: Build firmware
+      - name: Build firmware projects
         run: |
-          if [ -f hardware/firmware/platformio.ini ]; then
-            cd hardware/firmware && pio run
-          else
-            echo "no firmware project (platformio.ini not found), skipping"
+          found=0
+          for dir in hardware/firmware/*/; do
+            if [ -f "${dir}platformio.ini" ]; then
+              found=1
+              echo "Building $dir"
+              secrets_example="${dir}include/config_secrets.h.example"
+              secrets_file="${dir}include/config_secrets.h"
+              if [ -f "$secrets_example" ] && [ ! -f "$secrets_file" ]; then
+                cp "$secrets_example" "$secrets_file"
+              fi
+              (cd "$dir" && pio run)
+            fi
+          done
+          if [ "$found" -eq 0 ]; then
+            echo "no firmware projects (platformio.ini not found), skipping"
           fi
       - name: Prepare artifacts
         run: |
           mkdir -p dist
-          if [ -d hardware/firmware/.pio ]; then
-            find hardware/firmware/.pio -name "*.bin" -exec cp {} dist/ \; || true
-          else
+          find hardware/firmware -path "*/.pio/*" -name "*.bin" -exec cp {} dist/ \; || true
+          if [ -z "$(ls -A dist 2>/dev/null)" ]; then
             echo "no build output"
           fi
       - name: Upload artifact

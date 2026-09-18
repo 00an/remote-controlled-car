@@ -14,7 +14,7 @@ A full-stack IoT system for driving a remote-controlled car in real time. A stee
 
 **Hardware:** ESP32 (C++, PlatformIO/Arduino framework) for the car firmware; a Python (`pygame`) script for wheel input
 
-**Deployment:** Docker images for backend and frontend, Terraform-managed infrastructure, deployed to a Kubernetes (OKD/OpenShift) cluster
+**Deployment:** Docker images for backend and frontend, deployed to a Kubernetes (OKD/OpenShift) cluster
 
 ## Repo structure
 
@@ -24,7 +24,6 @@ backend/      API, WebSocket hub, auth
 hardware/     firmware, PCB files, datasheets, BOM
 docs/         architecture notes, setup guides, decision records
 ai/           ETL pipeline + analytics dashboard
-scripts/      bootstrap and dev tooling
 ```
 
 ## Components

@@ -1,9 +1,9 @@
-# Backend: als er Java files staged zijn, run Spotless en re-stage
-if git diff --cached --name-only --diff-filter=ACM | grep -q "^NL-14-backend/.*\.java$"; then
+# Backend: if any Java files are staged, run Spotless and re-stage them
+if git diff --cached --name-only --diff-filter=ACM | grep -q "^backend/.*\.java$"; then
   echo "Formatting Java files with Spotless..."
-  (cd NL-14-backend && sh mvnw -q spotless:apply) || exit 1
-  git diff --cached --name-only --diff-filter=ACM | grep "^NL-14-backend/.*\.java$" | xargs git add
+  (cd backend && sh mvnw -q spotless:apply) || exit 1
+  git diff --cached --name-only --diff-filter=ACM | grep "^backend/.*\.java$" | xargs git add
 fi
 
-# Frontend: lint-staged regelt ESLint + Prettier op de gestaagde JS/TS/etc files
-cd nl-14-frontend && npx lint-staged
+# Frontend: lint-staged handles ESLint + Prettier on staged JS/TS/etc files
+cd frontend && npx lint-staged

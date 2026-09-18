@@ -6,7 +6,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 
 export const metadata: Metadata = {
-  title: 'NL-14 — FPV Racing Project',
+  title: 'Remote Controlled Car — FPV Racing Project',
   description: 'Control a mini race car in first person view.',
 };
 

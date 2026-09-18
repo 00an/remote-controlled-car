@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-// Seed data for local dev: creates a test user (tobias / password123) with a few rides
+// Seed data for local dev: creates a test user (demo / password123) with a few rides
 @Profile("dev")
 @Component
 public class DbInitializer {
@@ -32,24 +32,24 @@ public class DbInitializer {
     rideRepository.deleteAll();
     userRepository.deleteAll();
 
-    User tobias =
+    User demoUser =
         userRepository.save(
             User.builder()
-                .username("tobias")
-                .firstName("Tobias")
-                .lastName("Quartier")
-                .email("tobias@example.com")
+                .username("demo")
+                .firstName("Demo")
+                .lastName("User")
+                .email("demo@example.com")
                 .password(passwordEncoder.encode("password123"))
                 .privacyConsent(true)
                 .build());
 
     rideRepository.save(
-        Ride.builder().user(tobias).topspeed(120).averagespeed(80).timespent(3600).build());
+        Ride.builder().user(demoUser).topspeed(120).averagespeed(80).timespent(3600).build());
 
     rideRepository.save(
-        Ride.builder().user(tobias).topspeed(95).averagespeed(60).timespent(1800).build());
+        Ride.builder().user(demoUser).topspeed(95).averagespeed(60).timespent(1800).build());
 
     rideRepository.save(
-        Ride.builder().user(tobias).topspeed(140).averagespeed(100).timespent(5400).build());
+        Ride.builder().user(demoUser).topspeed(140).averagespeed(100).timespent(5400).build());
   }
 }

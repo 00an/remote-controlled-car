@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Frontend
 
-## Getting Started
+Next.js dashboard for the remote-controlled car. Shows the live WebSocket
+control stream and camera feed, and lets a driver steer with the keyboard
+as a fallback to the physical wheel.
 
-First, run the development server:
+## STACK
+
+- Next.js 16 (App Router) + React 19, TypeScript
+- Tailwind CSS 4
+- next-intl for i18n (`en` / `nl`, locale in the URL)
+- husky + lint-staged for pre-commit formatting/linting
+- axe-core for automated WCAG accessibility checks
+
+## SETUP COMMANDS
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Runs on `http://localhost:8080`. Create `frontend/.env` from
+[`.env.example`](.env.example) and point `NEXT_PUBLIC_API_URL` at the
+backend (`http://localhost:3000` for local dev).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Other scripts:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build       # production build
+npm run lint         # ESLint
+npm run format       # Prettier — write
+npm run a11y         # axe-core accessibility check across all app/[locale] pages
+```
 
-## Learn More
+## STRUCTURE
 
-To learn more about Next.js, take a look at the following resources:
+```
+app/[locale]/    routed pages (home, login, signup, dashboard, rides, privacy)
+components/      shared UI components (forms, header, privacy notice)
+context/         React context (auth)
+services/        typed API clients (users, rides)
+lib/             fetch wrapper / API helpers
+i18n/            next-intl request config
+public/locale/   en/nl translation JSON
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## ENV VARIABLES
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Variable | Purpose |
+|---|---|
+| `NEXT_PUBLIC_API_URL` | base URL of the backend API/WebSocket |
 
-## Deploy on Vercel
+## NOTES
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Auth uses an HttpOnly cookie set by the backend — no token handling on
+  the client.
+- Security headers and a strict CSP are configured in `next.config.ts`.
+- `middleware.ts` handles the `en`/`nl` locale routing.

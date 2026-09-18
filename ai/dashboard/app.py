@@ -1,4 +1,4 @@
-"""NL-14 interactive analytics dashboard.
+"""Interactive analytics dashboard.
 
 Reads from MongoDB live (cached with a short TTL) and exposes:
   - ETL pipeline overview (counts, quality, source mix)
@@ -43,7 +43,7 @@ from etl.transform import (
 )
 
 st.set_page_config(
-    page_title="NL-14 Control Input Analytics",
+    page_title="Control Input Analytics",
     page_icon=":racing_car:",
     layout="wide",
 )
@@ -243,7 +243,7 @@ def render_step_timeline(steps: list[StepResult], container) -> None:
 # Sidebar — global filters
 # ---------------------------------------------------------------------------
 
-st.sidebar.title("NL-14 Analytics")
+st.sidebar.title("Car Analytics")
 
 try:
     df_all = load_inputs()
@@ -851,7 +851,7 @@ with tab_about:
 
     st.markdown(
         """
-This dashboard is the **analytics window** on the NL-14 remote-controlled-car
+This dashboard is the **analytics window** on the remote-controlled-car
 project. It reads from MongoDB and lets you explore how a physical steering
 wheel (or keyboard fallback) is driving an ESP32-controlled car.
 
