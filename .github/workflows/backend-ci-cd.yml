@@ -1,0 +1,82 @@
+name: Backend CI/CD
+on:
+  push:
+    # Run on push to main / dev branch
+    branches: ['main', 'dev']
+    # Only trigger when backend files change
+    paths:
+      - 'nl-14-backend/**'
+  # Allow manual execution
+  workflow_dispatch:
+env:
+  # GitHub Container Registry
+  REGISTRY: ghcr.io
+  # Docker image name
+  IMAGE_NAME: ${{ github.repository }}/backend
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      # Download repository code
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Set up Java for testing
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      # Run tests
+      - name: Run tests
+        working-directory: ./nl-14-backend
+        run: mvn -T 1C test
+
+      # Authenticate with GitHub Container Registry
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Set up Docker Buildx for cache support
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      # Lowercase image name for Docker registry compatibility
+      - name: Set lowercase image name
+        run: echo "IMAGE_NAME_LOWER=$(echo '${{ env.IMAGE_NAME }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
+      # Generate Docker image tags and labels
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_LOWER }}
+
+      # Build Docker image and push to GHCR
+      - name: Build and push Docker image
+        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
+        with:
+          context: ./nl-14-backend
+          push: true
+          provenance: false
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME_LOWER }}:cache
+          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME_LOWER }}:cache,mode=max
+
+      # Keep only latest 3 container versions
+      - name: Delete old package versions (keep last 3)
+        uses: actions/delete-package-versions@v5
+        with:
+          package-name: itip-nl-14-racingboys/backend
+          package-type: container
+          min-versions-to-keep: 3
+          token: ${{ secrets.GITHUB_TOKEN }}

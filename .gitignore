@@ -1,0 +1,7 @@
+.idea/
+.DS_Store
+.env
+*AGENTS.md
+*CLAUDE.md
+CONTRIBUTING.md
+docs/setup.md

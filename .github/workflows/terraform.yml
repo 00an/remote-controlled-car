@@ -1,0 +1,39 @@
+name: Terraform
+on:
+  push:
+    # Run on push to main branch
+    branches: ['main']
+    # Only trigger when terraform files change
+    paths:
+      - 'terraform/**'
+  # Allow manual execution
+  workflow_dispatch:
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      # Download repository code
+      - name: Checkout
+        uses: actions/checkout@v3
+        
+      # Set up Terraform
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        
+      # Cache Terraform providers to speed up init
+      - name: Cache Terraform providers
+        uses: actions/cache@v4
+        with:
+          path: ./terraform/.terraform
+          key: terraform-${{ hashFiles('terraform/.terraform.lock.hcl') }}
+          restore-keys: terraform-
+          
+      # Initialize Terraform (download providers)
+      - name: Terraform Init
+        working-directory: ./terraform
+        run: terraform init
+        
+      # Plan infrastructure changes
+      - name: Terraform Plan
+        working-directory: ./terraform
+        run: terraform plan -var="okd_token=${{ secrets.OKD_TOKEN }}"

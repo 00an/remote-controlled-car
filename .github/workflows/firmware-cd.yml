@@ -1,0 +1,37 @@
+name: firmware-cd
+
+on:
+  workflow_run:
+    workflows: ["firmware-ci"]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch: {}
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install PlatformIO
+        run: pip install platformio
+      - name: Build firmware
+        run: |
+          if [ -f hardware/firmware/platformio.ini ]; then
+            cd hardware/firmware && pio run
+          else
+            echo "no firmware project (platformio.ini not found), skipping"
+          fi
+      - name: Prepare artifacts
+        run: |
+          mkdir -p dist
+          if [ -d hardware/firmware/.pio ]; then
+            find hardware/firmware/.pio -name "*.bin" -exec cp {} dist/ \; || true
+          else
+            echo "no build output"
+          fi
+      - name: Upload artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: firmware-bin
+          path: dist

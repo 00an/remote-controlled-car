@@ -1,0 +1,123 @@
+{
+    "home": {
+      "hero": {
+        "label": "Full-stack IoT project",
+        "title": "FPV racing",
+        "subtitle": "Project",
+        "description": "Bestuur een mini-raceauto in first person view!",
+        "subtext": "Ontworpen en gebouwd door developers met een passie voor technologie, programmeren en elektronica",
+        "cta": "BEGIN MET RACEN"
+      },
+      "about": {
+        "label": "Over ons",
+        "title": "Wie zijn we?",
+        "description": "We zijn een klein team met een passie voor het bouwen van creatieve technologieprojecten en het experimenteren met hardware en software.",
+        "subtext": "Dit project combineert web development, elektronica, en real-world systeemintegratie."
+      },
+      "project": {
+        "label": "Over het project",
+        "title": "Ons project",
+        "description": "We hebben een volledige applicatie gemaakt waarmee je in real-time een mini-raceauto kan besturen met een echt stuur en pedalen!",
+        "subtext": "Ons doel was om een creatief en interactief project te ontwerpen en bouwen, terwijl we veel leerden over de communicatie tussen hardware en software."
+      },
+      "team": {
+        "label": "Team",
+        "title": "Meet the Team",
+        "description": "Het team achter dit project",
+        "order": "Van links naar rechts:"
+      }
+    },
+    "header": {
+      "home": "Home",
+      "about": "Over ons",
+      "dashboard": "Dashboard",
+      "rides": "Ritten",
+      "signin": "Inloggen",
+      "logout": "Uitloggen",
+      "welcome": "Welkom",
+      "language": "Taal"
+    },
+    "rides": {
+      "label": "RACE LOG",
+      "title": "Ritgeschiedenis",
+      "subtitle": "Je vorige ritten",
+      "loading": "Ritten laden...",
+      "error": "Kon je ritten niet laden. Zorg dat je bent ingelogd.",
+      "loginPrompt": "Ga naar inloggen",
+      "empty": "Nog geen ritten. Tijd om te racen!",
+      "rideLabel": "RIT",
+      "topSpeed": "Topsnelheid",
+      "avgSpeed": "Gem. snelheid",
+      "duration": "Duur"
+    },
+    "dashboard": {
+      "telemetry": "LIVE TELEMETRIE",
+      "title": "CONTROLLER",
+      "start": "START",
+      "stop": "STOP",
+      "keyboard": "TOETSENBORD",
+      "scriptStarting": "Starten...",
+      "scriptStarted": "Gestart (pid {pid})",
+      "scriptAlreadyRunning": "Draait al",
+      "scriptError": "Fout: {message}",
+      "scriptStopping": "Stoppen...",
+      "scriptStopped": "Gestopt",
+      "scriptFailed": "Verbinding mislukt",
+      "scriptRunning": "Script draait",
+      "scriptNotRunning": "Script gestopt",
+      "online": "ONLINE",
+      "offline": "OFFLINE",
+      "steeringAxis": "AXIS",
+      "steering": "STEERING",
+      "drive": "DRIVE",
+      "movement": "MOVEMENT",
+      "forward": "VOORUIT",
+      "reverse": "ACHTERUIT",
+      "keyboardControls": "TOETSENBORD BESTURING",
+      "keyLeft": "Stuur links",
+      "keyRight": "Stuur rechts",
+      "keyUp": "Gas",
+      "keyDown": "Rem",
+      "keySpace": "Noodstop",
+      "websocketInfo": "WEBSOCKET STREAM · BACKEND :3000",
+      "deleteError": "Er ging iets mis"
+    },
+    "auth": {
+      "login": {
+        "welcome": "Welkom terug",
+        "title": "Inloggen",
+        "description": "Voer je gegevens in om verder te gaan",
+        "username": "Gebruikersnaam",
+        "password": "Wachtwoord",
+        "submit": "Inloggen",
+        "noAccount": "Nog geen account?",
+        "createAccount": "Maak er één",
+        "usernameRequired": "Gebruikersnaam is verplicht",
+        "passwordRequired": "Wachtwoord is verplicht",
+        "success": "Succesvol ingelogd",
+        "unknownError": "Er ging iets mis"
+      },
+      "signup": {
+        "label": "Begin hier",
+        "title": "Account aanmaken",
+        "description": "Vul je gegevens in om verder te gaan",
+        "username": "Gebruikersnaam",
+        "firstName": "Voornaam",
+        "lastName": "Achternaam",
+        "email": "E-mail",
+        "password": "Wachtwoord",
+        "submit": "Account aanmaken",
+        "usernameRequired": "Gebruikersnaam is verplicht",
+        "passwordRequired": "Wachtwoord is verplicht",
+        "firstNameRequired": "Voornaam is verplicht",
+        "lastNameRequired": "Achternaam is verplicht",
+        "emailRequired": "E-mail is verplicht",
+        "emailInvalid": "Voer een geldig e-mailadres in",
+        "passwordTooShort": "Wachtwoord moet minimaal 8 tekens bevatten",
+        "consentRequired": "Je moet akkoord gaan met de privacyverklaring om een account aan te maken",
+        "privacyConsentRequired": "Je moet toestemming geven voor gegevensverwerking om een account aan te maken",
+        "success": "Account succesvol aangemaakt!",
+        "unknownError": "Er ging iets mis"
+      }
+    }
+  }

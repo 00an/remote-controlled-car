@@ -1,0 +1,123 @@
+{
+    "home": {
+      "hero": {
+        "label": "Full-stack IoT project",
+        "title": "FPV racing",
+        "subtitle": "Project",
+        "description": "Control a mini race car in first person view!",
+        "subtext": "Designed and built by developers passionate about technology, programming and electronics",
+        "cta": "START RACING"
+      },
+      "about": {
+        "label": "About us",
+        "title": "Who are we?",
+        "description": "We're a small team passionate about building creative technology projects and experimenting with hardware and software.",
+        "subtext": "This project combines web development, electronics, and real-world systems integration."
+      },
+      "project": {
+        "label": "About the project",
+        "title": "Our project",
+        "description": "We have built a full application that lets you control a mini race car in real-time with a real steering wheel and pedals!",
+        "subtext": "Our goal was to design and build a creative, interactive project while learning a lot about the communication between hardware and software."
+      },
+      "team": {
+        "label": "Team",
+        "title": "Meet the Team",
+        "description": "The team behind this project",
+        "order": "From left to right:"
+      }
+    },
+    "header": {
+      "home": "Home",
+      "about": "About us",
+      "dashboard": "Dashboard",
+      "rides": "Rides",
+      "signin": "Sign in",
+      "logout": "Logout",
+      "welcome": "Welcome",
+      "language": "Language"
+    },
+    "rides": {
+      "label": "RACE LOG",
+      "title": "Ride History",
+      "subtitle": "Your past rides",
+      "loading": "Loading rides...",
+      "error": "Could not load your rides. Make sure you are logged in.",
+      "loginPrompt": "Go to login",
+      "empty": "No rides yet. Time to hit the track!",
+      "rideLabel": "RIDE",
+      "topSpeed": "Top speed",
+      "avgSpeed": "Avg speed",
+      "duration": "Duration"
+    },
+    "dashboard": {
+      "telemetry": "LIVE TELEMETRY",
+      "title": "CONTROLLER",
+      "start": "START",
+      "stop": "STOP",
+      "keyboard": "KEYBOARD",
+      "scriptStarting": "Starting...",
+      "scriptStarted": "Started (pid {pid})",
+      "scriptAlreadyRunning": "Already running",
+      "scriptError": "Error: {message}",
+      "scriptStopping": "Stopping...",
+      "scriptStopped": "Stopped",
+      "scriptFailed": "Connection failed",
+      "scriptRunning": "Script running",
+      "scriptNotRunning": "Script stopped",
+      "online": "ONLINE",
+      "offline": "OFFLINE",
+      "steeringAxis": "AXIS",
+      "steering": "STEERING",
+      "drive": "DRIVE",
+      "movement": "MOVEMENT",
+      "forward": "FORWARD",
+      "reverse": "REVERSE",
+      "keyboardControls": "KEYBOARD CONTROLS",
+      "keyLeft": "Steer left",
+      "keyRight": "Steer right",
+      "keyUp": "Throttle",
+      "keyDown": "Brake",
+      "keySpace": "Emergency stop",
+      "websocketInfo": "WEBSOCKET STREAM · BACKEND :3000",
+      "deleteError": "Something went wrong"
+    },
+    "auth": {
+      "login": {
+        "welcome": "Welcome back",
+        "title": "Sign in",
+        "description": "Enter your credentials to continue",
+        "username": "Username",
+        "password": "Password",
+        "submit": "Login",
+        "noAccount": "No account yet?",
+        "createAccount": "Create one",
+        "usernameRequired": "Username is required",
+        "passwordRequired": "Password is required",
+        "success": "Successfully logged in",
+        "unknownError": "Something went wrong"
+      },
+      "signup": {
+        "label": "Get started",
+        "title": "Create account",
+        "description": "Fill in your details to get started",
+        "username": "Username",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "email": "Email",
+        "password": "Password",
+        "submit": "Create Account",
+        "usernameRequired": "Username is required",
+        "passwordRequired": "Password is required",
+        "firstNameRequired": "First name is required",
+        "lastNameRequired": "Last name is required",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Please enter a valid email address",
+        "passwordTooShort": "Password must be at least 8 characters",
+        "consentRequired": "You must accept the privacy notice to create an account",
+        "privacyConsentRequired": "You must consent to data processing to create an account",
+        "success": "Account created successfully!",
+        "unknownError": "Something went wrong"
+      }
+    }
+  }

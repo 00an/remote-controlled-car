@@ -1,0 +1,26 @@
+name: firmware-ci
+
+on:
+  pull_request:
+    paths:
+      - "hardware/firmware/**"
+  push:
+    branches: [main]
+    paths:
+      - "hardware/firmware/**"
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install PlatformIO
+        run: pip install platformio
+      - name: Build firmware (if project exists)
+        run: |
+          if [ -f hardware/firmware/platformio.ini ]; then
+            cd hardware/firmware && pio run
+          else
+            echo "no firmware project (platformio.ini not found), skipping"
+          fi
