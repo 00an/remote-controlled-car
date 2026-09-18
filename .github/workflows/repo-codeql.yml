@@ -44,13 +44,13 @@ jobs:
             echo "No supported source files found, skipping CodeQL."
           fi
 
-      - uses: github/codeql-action/init@v4.37.3
+      - uses: github/codeql-action/init@v4.38.0
         if: steps.detect.outputs.found == 'true'
         with:
           languages: ${{ steps.detect.outputs.languages }}
           build-mode: none
 
-      - uses: github/codeql-action/analyze@v4.37.3
+      - uses: github/codeql-action/analyze@v4.38.0
         if: steps.detect.outputs.found == 'true'
         with:
           output: codeql-results
