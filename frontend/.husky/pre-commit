@@ -1,0 +1,9 @@
+# Backend: if any Java files are staged, run Spotless and re-stage them
+if git diff --cached --name-only --diff-filter=ACM | grep -q "^backend/.*\.java$"; then
+  echo "Formatting Java files with Spotless..."
+  (cd backend && sh mvnw -q spotless:apply) || exit 1
+  git diff --cached --name-only --diff-filter=ACM | grep "^backend/.*\.java$" | xargs git add
+fi
+
+# Frontend: lint-staged handles ESLint + Prettier on staged JS/TS/etc files
+cd frontend && npx lint-staged

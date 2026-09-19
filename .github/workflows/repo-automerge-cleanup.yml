@@ -1,0 +1,65 @@
+name: repo-automerge-cleanup
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize]
+
+concurrency:
+  group: repo-automerge-cleanup-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  automerge-and-cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enable auto-merge
+        run: |
+          gh pr merge --auto --squash "$PR_URL" || {
+            echo "gh pr merge failed or already applied, checking PR state..."
+            STATE=$(gh pr view "$PR_URL" --repo "${{ github.repository }}" --json state -q .state)
+            echo "Current state: $STATE"
+            if [ "$STATE" = "MERGED" ] || [ "$STATE" = "CLOSED" ]; then
+              echo "PR already resolved, continuing to cleanup step."
+              exit 0
+            fi
+            echo "PR still open and merge command failed for another reason."
+            exit 1
+          }
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Wait for merge, then delete head branch
+        run: |
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          HEAD_REF="${{ github.event.pull_request.head.ref }}"
+          HEAD_REPO="${{ github.event.pull_request.head.repo.full_name }}"
+
+          # Only ever delete a branch that lives in this repo, never a fork.
+          if [ "$HEAD_REPO" != "${{ github.repository }}" ]; then
+            echo "Head branch is on a fork, skipping deletion."
+            exit 0
+          fi
+
+          echo "Waiting for PR #$PR_NUMBER to merge..."
+          for i in $(seq 1 60); do
+            STATE=$(gh pr view "$PR_NUMBER" --repo "${{ github.repository }}" --json state -q .state)
+            if [ "$STATE" = "MERGED" ]; then
+              echo "Merged. Deleting branch $HEAD_REF..."
+              gh api -X DELETE "repos/${{ github.repository }}/git/refs/heads/$HEAD_REF" \
+                || echo "Branch already gone, skipping"
+              exit 0
+            elif [ "$STATE" = "CLOSED" ]; then
+              echo "PR was closed without merging, leaving branch alone."
+              exit 0
+            fi
+            sleep 10
+          done
+
+          echo "Timed out after 10 minutes waiting for merge, leaving branch alone."
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

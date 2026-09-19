@@ -1,0 +1,11 @@
+pandas>=2.2.3
+numpy>=2.1
+matplotlib>=3.9
+seaborn>=0.13
+python-dotenv>=1.0
+jupyter>=1.1
+pymongo>=4.10
+pyarrow>=18.0
+streamlit>=1.40
+streamlit-autorefresh>=1.0
+plotly>=5.24

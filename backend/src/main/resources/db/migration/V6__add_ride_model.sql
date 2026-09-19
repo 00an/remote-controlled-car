@@ -1,0 +1,11 @@
+DROP TABLE IF EXISTS "ride" CASCADE;
+
+CREATE TABLE IF NOT EXISTS "ride" (
+    id BIGSERIAL NOT NULL,
+    created_at TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    topspeed INT NOT NULL,
+    averagespeed INT NOT NULL,
+    timespent INT NOT NULL,
+
+    CONSTRAINT ride_pkey PRIMARY KEY (id)
+);

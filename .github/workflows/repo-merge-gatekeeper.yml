@@ -1,0 +1,22 @@
+name: repo-merge-gatekeeper
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch: {}
+
+jobs:
+  merge-gatekeeper:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      checks: read
+      statuses: read
+    steps:
+      - name: Wait for other checks to finish
+        uses: upsidr/merge-gatekeeper@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          timeout: 600
+          interval: 10
+          ignored: "merge-gatekeeper,automerge-and-cleanup,analyze"

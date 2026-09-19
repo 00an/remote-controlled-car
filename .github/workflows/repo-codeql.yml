@@ -1,0 +1,173 @@
+name: repo-codeql
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+concurrency:
+  group: codeql-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect supported languages
+        id: detect
+        run: |
+          LANGS=""
+          if find . -type f \( -name "*.js" -o -name "*.ts" -o -name "*.jsx" -o -name "*.tsx" \) -not -path "*/node_modules/*" | grep -q .; then
+            LANGS="${LANGS}javascript-typescript,"
+          fi
+          if find . -type f -name "*.py" -not -path "*/node_modules/*" | grep -q .; then
+            LANGS="${LANGS}python,"
+          fi
+          if [ -f "backend/pom.xml" ]; then
+            LANGS="${LANGS}java,"
+          fi
+          LANGS="${LANGS%,}"
+          if [ -n "$LANGS" ]; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+            echo "languages=$LANGS" >> "$GITHUB_OUTPUT"
+            echo "Detected languages: $LANGS"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+            echo "No supported source files found, skipping CodeQL."
+          fi
+
+      - uses: github/codeql-action/init@v4.37.3
+        if: steps.detect.outputs.found == 'true'
+        with:
+          languages: ${{ steps.detect.outputs.languages }}
+          build-mode: none
+
+      - uses: github/codeql-action/analyze@v4.37.3
+        if: steps.detect.outputs.found == 'true'
+        with:
+          output: codeql-results
+          upload: never
+
+      - name: Install PDF library
+        if: steps.detect.outputs.found == 'true'
+        run: pip install fpdf2
+
+      - name: Build PDF report
+        if: steps.detect.outputs.found == 'true'
+        env:
+          COMMIT_SHA: ${{ github.sha }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          python3 - <<'EOF'
+          import json, glob, os, pathlib, textwrap
+          from datetime import datetime, timezone
+          from fpdf import FPDF
+          rows = []
+          for sarif_file in glob.glob("codeql-results/*.sarif"):
+              data = json.loads(pathlib.Path(sarif_file).read_text())
+              for run in data.get("runs", []):
+                  for result in run.get("results", []):
+                      rule = result.get("ruleId", "unknown")
+                      message = result.get("message", {}).get("text", "")
+                      level = result.get("level", "warning")
+                      locations = result.get("locations", [])
+                      path = ""
+                      line = ""
+                      if locations:
+                          phys = locations[0].get("physicalLocation", {})
+                          path = phys.get("artifactLocation", {}).get("uri", "")
+                          line = phys.get("region", {}).get("startLine", "")
+                      rows.append((level, rule, path, line, message))
+          rows.sort(key=lambda r: (r[0], r[2]))
+          commit_sha = os.environ.get("COMMIT_SHA", "")
+          ref_name = os.environ.get("REF_NAME", "")
+          generated = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+          errors = sum(1 for r in rows if r[0] == "error")
+          warnings = sum(1 for r in rows if r[0] == "warning")
+          notes = sum(1 for r in rows if r[0] == "note")
+          total = len(rows)
+          LEVEL_COLORS = {
+              "error": (217, 83, 79),
+              "warning": (240, 173, 78),
+              "note": (91, 155, 213),
+          }
+          pdf = FPDF()
+          pdf.add_page()
+          pdf.set_font("Helvetica", "B", 18)
+          pdf.cell(0, 10, "CodeQL Report", ln=True)
+          pdf.set_font("Helvetica", "", 10)
+          pdf.set_text_color(90, 90, 90)
+          pdf.cell(0, 6, f"Generated {generated}", ln=True)
+          pdf.cell(0, 6, f"Commit {commit_sha[:12]} on {ref_name}", ln=True)
+          pdf.set_text_color(0, 0, 0)
+          pdf.ln(3)
+          if errors > 0:
+              badge_color, badge_text = (217, 83, 79), "NEEDS ATTENTION"
+          elif warnings > 0:
+              badge_color, badge_text = (240, 173, 78), "REVIEW SUGGESTED"
+          else:
+              badge_color, badge_text = (92, 184, 92), "CLEAN"
+          pdf.set_fill_color(*badge_color)
+          pdf.set_text_color(255, 255, 255)
+          pdf.set_font("Helvetica", "B", 11)
+          pdf.cell(50, 9, badge_text, fill=True, align="C")
+          pdf.set_text_color(0, 0, 0)
+          pdf.set_font("Helvetica", "", 10)
+          pdf.cell(0, 9, f"   {total} total finding(s)", ln=True)
+          pdf.ln(2)
+          for label, count, color in [
+              ("Errors", errors, LEVEL_COLORS["error"]),
+              ("Warnings", warnings, LEVEL_COLORS["warning"]),
+              ("Notes", notes, LEVEL_COLORS["note"]),
+          ]:
+              pdf.set_fill_color(*color)
+              pdf.cell(4, 5, "", fill=True)
+              pdf.cell(4, 5, "")
+              pdf.set_font("Helvetica", "", 9)
+              pdf.cell(35, 5, f"{label}: {count}")
+          pdf.ln(10)
+          if total == 0:
+              pdf.set_font("Helvetica", "I", 10)
+              pdf.set_text_color(90, 90, 90)
+              pdf.cell(0, 8, "No findings. Nothing to review.", ln=True)
+          else:
+              pdf.set_font("Helvetica", "B", 9)
+              headers = ["Level", "Rule", "File", "Line", "Message"]
+              widths = [18, 35, 60, 12, 65]
+              pdf.set_fill_color(230, 230, 230)
+              for h, w in zip(headers, widths):
+                  pdf.cell(w, 7, h, border=1, fill=True)
+              pdf.ln()
+              pdf.set_font("Helvetica", "", 8)
+              for level, rule, path, line, message in rows:
+                  r, g, b = LEVEL_COLORS.get(level, (255, 255, 255))
+                  pdf.set_fill_color(r, g, b)
+                  pdf.set_text_color(255, 255, 255)
+                  pdf.cell(widths[0], 6, str(level)[:14], border=1, fill=True)
+                  pdf.set_text_color(0, 0, 0)
+                  pdf.cell(widths[1], 6, str(rule)[:28], border=1)
+                  pdf.cell(widths[2], 6, str(path)[:48], border=1)
+                  pdf.cell(widths[3], 6, str(line)[:6], border=1)
+                  pdf.cell(widths[4], 6, textwrap.shorten(str(message), width=52, placeholder="..."), border=1)
+                  pdf.ln()
+          pdf.output("report.pdf")
+          print(f"Report written with {total} findings ({errors} errors, {warnings} warnings, {notes} notes).")
+          EOF
+
+      - name: Commit PDF report into docs/
+        if: steps.detect.outputs.found == 'true'
+        run: |
+          mkdir -p docs
+          cp report.pdf docs/codeql-report.pdf
+          git -c user.name="github-actions" -c user.email="github-actions@github.com" add docs/codeql-report.pdf
+          git -c user.name="github-actions" -c user.email="github-actions@github.com" \
+            commit -m "Update CodeQL report" || echo "Nothing to commit"
+          git push

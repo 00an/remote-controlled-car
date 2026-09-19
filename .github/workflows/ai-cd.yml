@@ -1,0 +1,19 @@
+name: ai-cd
+
+on:
+  workflow_run:
+    workflows: ["ai-ci"]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch: {}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and push image
+        run: echo "build/push ai service image"
+      - name: Deploy
+        run: echo "connect to server, pull and restart ai service"

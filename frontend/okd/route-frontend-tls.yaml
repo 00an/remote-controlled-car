@@ -1,0 +1,19 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: nl14-frontend-tls
+  namespace: itip-nl-14
+  annotations:
+    haproxy.router.openshift.io/timeout: 30s
+spec:
+  host: frontend-itip-nl-14.apps.okd.ucll.cloud
+  to:
+    kind: Service
+    name: frontend
+    weight: 100
+  port:
+    targetPort: 8080-tcp
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None

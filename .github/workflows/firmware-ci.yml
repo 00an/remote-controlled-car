@@ -1,0 +1,39 @@
+name: firmware-ci
+
+on:
+  pull_request:
+    paths:
+      - "hardware/firmware/**"
+  push:
+    branches: [main]
+    paths:
+      - "hardware/firmware/**"
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install PlatformIO
+        run: pip install platformio
+      - name: Build firmware projects
+        run: |
+          found=0
+          for dir in hardware/firmware/*/; do
+            if [ -f "${dir}platformio.ini" ]; then
+              found=1
+              echo "Building $dir"
+              # config_secrets.h is git-ignored (real Wi-Fi credentials); use the
+              # placeholder .example so CI can compile without real secrets.
+              secrets_example="${dir}include/config_secrets.h.example"
+              secrets_file="${dir}include/config_secrets.h"
+              if [ -f "$secrets_example" ] && [ ! -f "$secrets_file" ]; then
+                cp "$secrets_example" "$secrets_file"
+              fi
+              (cd "$dir" && pio run)
+            fi
+          done
+          if [ "$found" -eq 0 ]; then
+            echo "no firmware projects (platformio.ini not found), skipping"
+          fi

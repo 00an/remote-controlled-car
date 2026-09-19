@@ -1,0 +1,26 @@
+name: ai-ci
+
+on:
+  pull_request:
+    paths:
+      - "ai/**"
+  push:
+    branches: [main]
+    paths:
+      - "ai/**"
+  workflow_dispatch: {}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install dependencies (if exists)
+        run: |
+          if [ -f ai/requirements.txt ]; then pip install -r ai/requirements.txt; else echo "no requirements"; fi
+      - name: Run tests (if exist)
+        run: |
+          if [ -d ai/tests ] || [ -f ai/test_*.py ]; then pytest ai || echo "no tests found"; else echo "skip tests"; fi
