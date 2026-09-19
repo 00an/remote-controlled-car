@@ -169,7 +169,6 @@ Automatically checks all pages against WCAG 2.0 A/AA and 2.1 A/AA via axe-core. 
 ## Further documentation
 
 - [`backend/patterns-documentation.md`](backend/patterns-documentation.md) — design patterns used in the backend
-- [`backend/refactor-documentation.md`](backend/refactor-documentation.md) — refactor of the cookie logic in UserController (before/after)
 - [`SECURITY.md`](SECURITY.md) — security policy and approach
 - Swagger UI: `http://localhost:3000/swagger-ui/index.html` (local)
 - OpenAPI spec: `http://localhost:3000/v1/api-docs`

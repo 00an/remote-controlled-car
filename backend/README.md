@@ -90,5 +90,4 @@ environment, nothing is hardcoded:
   script and the ESP32 have no login flow. See the comment above that
   matcher in `SecurityConfig` for the full rationale.
 - Further reading: [`patterns-documentation.md`](patterns-documentation.md)
-  (design patterns used) and [`refactor-documentation.md`](refactor-documentation.md)
-  (a before/after refactor of the cookie-handling logic).
+  (design patterns used).
