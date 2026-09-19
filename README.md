@@ -10,8 +10,8 @@ The backend and frontend run standalone with no extra hardware needed — the da
 
 1. **Backend** (from `backend/`):
 
-   ```bash
-   sh mvnw spring-boot:run
+   ```
+   mvnw.cmd spring-boot:run
    ```
 
    Runs on `http://localhost:3000`. The `dev` profile is active by default and uses an H2 in-memory database — no extra setup needed.
@@ -26,16 +26,11 @@ The backend and frontend run standalone with no extra hardware needed — the da
 
 2. **Frontend** (from `frontend/`):
 
-   ```bash
-   npm install
-   npm run dev
+   ```
+   echo NEXT_PUBLIC_API_URL=http://localhost:3000> .env && npm install && npm run dev
    ```
 
-   Runs on `http://localhost:8080`. Create a `.env` file in `frontend/` with:
-
-   ```
-   NEXT_PUBLIC_API_URL=http://localhost:3000
-   ```
+   (Creates the git-ignored `.env` the frontend needs to reach the backend, then installs and starts it.) Runs on `http://localhost:8080`.
 
 3. Open `http://localhost:8080` and log in — you're driving via the dashboard's keyboard controls, with the same live WebSocket stream a real car would receive.
 
@@ -155,9 +150,9 @@ Public endpoints are configured via OpenShift Route resources with TLS, defined 
 
 ### Backend
 
-```bash
+```
 cd backend
-sh mvnw test
+mvnw.cmd test
 ```
 
 Generates a JaCoCo coverage report at `target/site/jacoco/index.html`.

@@ -14,14 +14,13 @@ as a fallback to the physical wheel.
 
 ## SETUP COMMANDS
 
-```bash
-npm install
-npm run dev
+```
+echo NEXT_PUBLIC_API_URL=http://localhost:3000> .env && npm install && npm run dev
 ```
 
-Runs on `http://localhost:8080`. Create `frontend/.env` from
-[`.env.example`](.env.example) and point `NEXT_PUBLIC_API_URL` at the
-backend (`http://localhost:3000` for local dev).
+Runs on `http://localhost:8080`. (See [`.env.example`](.env.example) for
+the full set of variables — `NEXT_PUBLIC_API_URL` should point at the
+backend, `http://localhost:3000` for local dev.)
 
 Other scripts:
 
@@ -46,8 +45,8 @@ public/locale/   en/nl translation JSON
 
 ## ENV VARIABLES
 
-| Variable | Purpose |
-|---|---|
+| Variable              | Purpose                               |
+| --------------------- | ------------------------------------- |
 | `NEXT_PUBLIC_API_URL` | base URL of the backend API/WebSocket |
 
 ## NOTES

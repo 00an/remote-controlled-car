@@ -18,8 +18,8 @@ control frame.
 
 ## SETUP COMMANDS
 
-```bash
-sh mvnw spring-boot:run
+```
+mvnw.cmd spring-boot:run
 ```
 
 Runs on `http://localhost:3000` with the `dev` profile (H2 in-memory
@@ -27,8 +27,8 @@ database, PostgreSQL-compatibility mode — no local Postgres/Mongo needed).
 
 Run the tests:
 
-```bash
-sh mvnw test
+```
+mvnw.cmd test
 ```
 
 Coverage report: `target/site/jacoco/index.html`.
